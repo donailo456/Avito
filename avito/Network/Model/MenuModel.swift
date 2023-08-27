@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Welcome
+// MARK: - Response
 struct Response: Codable {
     let advertisements: [Advertisement]
 }

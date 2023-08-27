@@ -9,6 +9,8 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    //MARK: - CollectionView
+    
     lazy var myCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -21,6 +23,8 @@ class ViewController: UIViewController {
         return collection
     }()
     
+    //MARK: - Loading and Error
+    
     var indicator: UIActivityIndicatorView = {
         var indicatorView = UIActivityIndicatorView(style: .medium)
         indicatorView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
@@ -28,22 +32,25 @@ class ViewController: UIViewController {
         indicatorView.startAnimating()
         return indicatorView
     }()
-    let fadeView:UIView = UIView()
+
     let alert: UIAlertController = {
         let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel))
         return alert
     }()
     
+    //MARK: - Network Variables
+    
     private var viewModels = [MenuCollectionViewCellModel]()
     private var advertisement = [Advertisement]()
     
-
+    //MARK: - Main
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViews()
         
-        indicator.center = view.center
-        self.setupViews()
+        //MARK: Setting up the delay
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
             self.setupConstraints()
@@ -52,10 +59,14 @@ class ViewController: UIViewController {
         
     }
     
+    //MARK: - Add view
+    
     func setupViews() {
         view.addSubview(myCollectionView)
         view.addSubview(indicator)
     }
+    
+    //MARK: - Network
     
     func setupNetwork() {
         NetworkService.shared.getItemNetwork { [weak self] result in
@@ -79,7 +90,12 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    //MARK: - Constraints
+    
     func setupConstraints() {
+        indicator.center = view.center
+        
         NSLayoutConstraint.activate([
             myCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             myCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -90,6 +106,8 @@ class ViewController: UIViewController {
 
 
 }
+
+//MARK: - Delegate and DataSource
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -112,6 +130,8 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         present(vc, animated: true)
     }
 }
+
+//MARK: - DelegateFlowLayout
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

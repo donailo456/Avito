@@ -12,6 +12,8 @@ class DetailViewController: UIViewController {
     
     var detailModel: DetailModel?
     
+    //MARK: - Label
+    
     var nameLabel: UILabel = {
         let label = UILabel()
          label.numberOfLines = 0
@@ -80,6 +82,8 @@ class DetailViewController: UIViewController {
          return imageView
     }()
     
+    //MARK: - Loading and Error
+    
     var indicator: UIActivityIndicatorView = {
         var indicatorView = UIActivityIndicatorView(style: .medium)
         indicatorView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
@@ -93,19 +97,26 @@ class DetailViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .cancel))
         return alert
     }()
+    
+    //MARK: - DidLoad
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .white
+        
         addView()
         constraint()
-        indicator.center = view.center
+        
+        //MARK: Setting up the delay
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
             self.networkDetail()
         }
         
     }
+    
+    //MARK: - Add view
     
     func addView() {
         view.addSubview(nameLabel)
@@ -121,7 +132,11 @@ class DetailViewController: UIViewController {
         view.bringSubviewToFront(indicator)
     }
     
+    //MARK: - Constraints
+    
     func constraint() {
+        indicator.center = view.center
+        
         NSLayoutConstraint.activate([
             imageView.widthAnchor.constraint(equalToConstant: view.bounds.width),
             imageView.heightAnchor.constraint(equalToConstant: 400),
@@ -174,6 +189,8 @@ class DetailViewController: UIViewController {
         ])
     }
     
+    //MARK: - Network
+    
     func networkDetail() {
         NetworkService.shared.getItemDetailNetwork(id: Session.shared.idSession) { result in
             switch result {
@@ -199,6 +216,8 @@ class DetailViewController: UIViewController {
             }
         }
     }
+    
+    //MARK: - setting imageData
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()

@@ -7,6 +7,8 @@
 
 import UIKit
 
+//MARK: - Model
+
 class MenuCollectionViewCellModel {
     let idItem: String
     let title: String
@@ -30,6 +32,8 @@ class MenuCollectionViewCellModel {
 class MenuCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "MenuCell"
+    
+    //MARK: - Label
     
     var nameLabel: UILabel = {
         let label = UILabel()
@@ -57,6 +61,8 @@ class MenuCollectionViewCell: UICollectionViewCell {
          return label
      }()
     
+    //MARK: - ImageView
+    
     var imageView: UIImageView = {
         let imageView = UIImageView()
          imageView.backgroundColor = .secondarySystemBackground
@@ -66,6 +72,9 @@ class MenuCollectionViewCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 10
          return imageView
     }()
+    
+    //MARK: - Loading
+    
     var indicator: UIActivityIndicatorView = {
         var indicatorView = UIActivityIndicatorView(style: .medium)
         indicatorView.frame = CGRect(x: 70, y: 60, width: 40, height: 40)
@@ -87,8 +96,9 @@ class MenuCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         constraint()
-        
     }
+    
+    //MARK: - Constraints
     
     func constraint() {
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -128,6 +138,8 @@ class MenuCollectionViewCell: UICollectionViewCell {
         ])
     }
     
+    //MARK: - Add view
+    
     func setup() {
         self.contentView.addSubview(nameLabel)
         self.contentView.addSubview(priceLabel)
@@ -135,8 +147,9 @@ class MenuCollectionViewCell: UICollectionViewCell {
         self.contentView.addSubview(dataLabel)
         self.contentView.addSubview(imageView)
         self.contentView.addSubview(indicator)
-        
     }
+    
+    //MARK: - Add data in Model
     
     func configure(with viewModel: MenuCollectionViewCellModel) {
         nameLabel.text = viewModel.title
