@@ -12,14 +12,27 @@ class ViewController: UIViewController {
     lazy var myCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//        collection.backgroundColor = .systemGray
         collection.translatesAutoresizingMaskIntoConstraints = false
         
         collection.register(MenuCollectionViewCell.self, forCellWithReuseIdentifier: MenuCollectionViewCell.identifier)
         collection.delegate = self
         collection.dataSource = self
-        
+        collection.isHidden = true
         return collection
+    }()
+    
+    var indicator: UIActivityIndicatorView = {
+        var indicatorView = UIActivityIndicatorView(style: .medium)
+        indicatorView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        indicatorView.hidesWhenStopped = true
+        indicatorView.startAnimating()
+        return indicatorView
+    }()
+    let fadeView:UIView = UIView()
+    let alert: UIAlertController = {
+        let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        return alert
     }()
     
     private var viewModels = [MenuCollectionViewCellModel]()
@@ -28,13 +41,20 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViews()
-        setupConstraints()
-        setupNetwork()
+        
+        indicator.center = view.center
+        self.setupViews()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            self.setupConstraints()
+            self.setupNetwork()
+        }
+        
     }
     
     func setupViews() {
         view.addSubview(myCollectionView)
+        view.addSubview(indicator)
     }
     
     func setupNetwork() {
@@ -45,12 +65,17 @@ class ViewController: UIViewController {
                 self?.viewModels = advertisement.compactMap({
                     MenuCollectionViewCellModel(idItem: $0.id, title: $0.title, price: $0.price, location: $0.location, imageUrl: URL(string: $0.imageURL), data: $0.createdDate)
                 })
-                
                 DispatchQueue.main.async {
                     self?.myCollectionView.reloadData()
+                    self?.indicator.stopAnimating()
+                    self?.myCollectionView.isHidden = false
                 }
             case .failure(let error):
                 print(error)
+                DispatchQueue.main.async {
+                    self?.present(self!.alert, animated: true)
+                }
+                
             }
         }
     }
@@ -84,7 +109,6 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vc = DetailViewController()
         Session.shared.idSession = viewModels[indexPath.row].idItem
-//        print(viewModels[indexPath.row].idItem)
         present(vc, animated: true)
     }
 }

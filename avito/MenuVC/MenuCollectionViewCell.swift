@@ -66,6 +66,13 @@ class MenuCollectionViewCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 10
          return imageView
     }()
+    var indicator: UIActivityIndicatorView = {
+        var indicatorView = UIActivityIndicatorView(style: .medium)
+        indicatorView.frame = CGRect(x: 70, y: 60, width: 40, height: 40)
+        indicatorView.hidesWhenStopped = true
+        indicatorView.startAnimating()
+        return indicatorView
+    }()
     
     
     override init(frame: CGRect) {
@@ -88,6 +95,7 @@ class MenuCollectionViewCell: UICollectionViewCell {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         dataLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             imageView.widthAnchor.constraint(equalToConstant: 145),
             imageView.heightAnchor.constraint(equalToConstant: 145),
@@ -126,6 +134,7 @@ class MenuCollectionViewCell: UICollectionViewCell {
         self.contentView.addSubview(locationLabel)
         self.contentView.addSubview(dataLabel)
         self.contentView.addSubview(imageView)
+        self.contentView.addSubview(indicator)
         
     }
     
@@ -146,6 +155,7 @@ class MenuCollectionViewCell: UICollectionViewCell {
                 viewModel.imageData = data
                 DispatchQueue.main.async {
                     self?.imageView.image = UIImage(data: data)
+                    self?.indicator.stopAnimating()
                 }
             }.resume()
         }

@@ -25,7 +25,6 @@ final class NetworkService {
             else if let data = data {
                 do {
                     let result = try JSONDecoder().decode(Response.self, from: data)
-                    print("Advertisement: \(result.advertisements.count)")
                     complition(.success(result.advertisements))
                 } catch {
                     complition(.failure(error))
@@ -47,7 +46,6 @@ final class NetworkService {
             else if let data = data {
                 do {
                     let result = try JSONDecoder().decode(DetailModel.self, from: data)
-                    print("DetailModel: \(result)")
                     complition(.success(result))
                 }
                 catch {

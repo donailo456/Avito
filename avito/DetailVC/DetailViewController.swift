@@ -79,6 +79,20 @@ class DetailViewController: UIViewController {
         imageView.layer.cornerRadius = 10
          return imageView
     }()
+    
+    var indicator: UIActivityIndicatorView = {
+        var indicatorView = UIActivityIndicatorView(style: .medium)
+        indicatorView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        indicatorView.hidesWhenStopped = true
+        indicatorView.startAnimating()
+        return indicatorView
+    }()
+    
+    let alert: UIAlertController = {
+        let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        return alert
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,7 +100,11 @@ class DetailViewController: UIViewController {
         view.backgroundColor = .white
         addView()
         constraint()
-        networkDetail()
+        indicator.center = view.center
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            self.networkDetail()
+        }
+        
     }
     
     func addView() {
@@ -99,6 +117,8 @@ class DetailViewController: UIViewController {
         view.addSubview(emailLabel)
         view.addSubview(phoneNumberLabel)
         view.addSubview(imageView)
+        view.addSubview(indicator)
+        view.bringSubviewToFront(indicator)
     }
     
     func constraint() {
@@ -158,7 +178,6 @@ class DetailViewController: UIViewController {
         NetworkService.shared.getItemDetailNetwork(id: Session.shared.idSession) { result in
             switch result {
             case .success(let advertisement):
-                print("afad",advertisement)
                 self.detailModel = advertisement
                 DispatchQueue.main.async {
                     self.nameLabel.text = self.detailModel?.title
@@ -169,13 +188,16 @@ class DetailViewController: UIViewController {
                     self.emailLabel.text = self.detailModel?.email
                     self.phoneNumberLabel.text = self.detailModel?.phoneNumber
                     self.downloadImage(from: URL(string: self.detailModel?.imageURL ?? "")!)
+                    self.indicator.stopAnimating()
                 }
 
             case .failure(let error):
                 print(error)
+                DispatchQueue.main.async {
+                    self.present(self.alert, animated: true)
+                }
             }
         }
-        
     }
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
@@ -192,5 +214,4 @@ class DetailViewController: UIViewController {
             }
         }
     }
-
 }
