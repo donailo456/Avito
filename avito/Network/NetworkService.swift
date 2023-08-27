@@ -8,6 +8,9 @@
 import Foundation
 
 final class NetworkService {
+    
+    //MARK: - Main
+    
     static let shared = NetworkService()
     struct Constant{
         static let topHeadlinesURL = URL(string: "https://www.avito.st/s/interns-ios/main-page.json")
@@ -33,6 +36,8 @@ final class NetworkService {
         }
         task.resume()
     }
+    
+    //MARK: - Detail
     
     public func getItemDetailNetwork(id: String, complition: @escaping (Result<DetailModel, Error>) -> Void) {
         guard let url = URL(string: "https://www.avito.st/s/interns-ios/details/\(id).json") else {
