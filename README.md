@@ -11,10 +11,24 @@
   - Приложение написано на языке Swift.
   - Пользовательский интерфейс приложения реализован кодом без использования SwiftUI.
   - Для отображения списка используется UICollectionView с отображением в 2 столбца.
-  - £Для запроса данных используется URLSession.
+  - Для запроса данных используется URLSession.
+
+# Технические детали 
+- Язык программирования: Swift
+- Интерфейс: UIKit
+- Список товаров: UICollectionView с UICollectionViewFlowLayout
+- Загрузка данных: URLSession
 
 # Для запуска
-  Для запуска проекта можно скачать исходный zip-файл или применить в Xcode Swift Package Manager
+  1. Для запуска проекта можно скачать исходный zip-файл или применить в Xcode Swift Package Manager
+
+  HTTPS: ```https://github.com/donailo456/Avito.git```
+  
+  SSH: ```git@github.com:donailo456/Avito.git```
+
+  2. Откройте файл "avito.xcodeproj"
+  3. Сбилдите и запустите проект в Xcode
+
 
 # Важно 
 
@@ -27,3 +41,5 @@ DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
 ```
 
   Для показа состояния экрана ошибки, был использован AlertViewController, который сработает при ошибке
+
+  В проекте имеется кнопка "Позвонить", которая работает только на реальном устройстве
