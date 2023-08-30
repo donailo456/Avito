@@ -13,6 +13,8 @@ class Session {
     
     var idSession: String = ""
     
+    //MARK: - Convert Data
+    
     public func convertDateString(_ dateString: String) -> String? {
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd"
