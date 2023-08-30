@@ -155,7 +155,7 @@ class MenuCollectionViewCell: UICollectionViewCell {
         nameLabel.text = viewModel.title
         priceLabel.text = viewModel.price
         locationLabel.text = viewModel.location
-        dataLabel.text = viewModel.data
+        dataLabel.text = Session.shared.convertDateString(viewModel.data)
         
         if let data = viewModel.imageData {
             imageView.image = UIImage(data: data)

@@ -252,7 +252,7 @@ class DetailViewController: UIViewController {
                     self.nameLabel.text = self.detailModel?.title
                     self.priceLabel.text = self.detailModel?.price
                     self.locationLabel.text = "\(self.detailModel?.location ?? "" ), \(self.detailModel?.address ?? "")"
-                    self.createLabel.text = self.detailModel?.createdDate
+                    self.createLabel.text = Session.shared.convertDateString(self.detailModel?.createdDate ?? "")
                     self.descriptionTextView.text = self.detailModel?.description
                     self.emailLabel.text = self.detailModel?.email
                     self.phoneNumberLabel.text = self.detailModel?.phoneNumber
